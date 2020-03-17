@@ -1,3 +1,5 @@
+#include <vector>
+
 class Tensor {
     std::vector<int> shape;
     std::vector<double> vals;
