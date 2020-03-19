@@ -5,11 +5,11 @@ class Tensor {
     std::vector<double> vals;
     int size;
     int dimensions;
-    int map_id(std::vector<int> ids);
+    int map_id(const& std::vector<int> ids);
     public:
-        Tensor(std::vector<int> input_shape);
-        void set_value(std::vector<int> id, double val);
-        double get_value(std::vector<int> id);
+        Tensor(const% std::vector<int> input_shape);
+        void set_value(const& std::vector<int> id, double val);
+        double get_value(const& std::vector<int> id);
 };
 
 

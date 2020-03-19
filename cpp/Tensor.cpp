@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Tensor::Tensor(vector<int> input_shape) {
+Tensor::Tensor(const& vector<int> input_shape) {
     int local_size = 1;
     shape.clear();
     vals.clear();
@@ -16,7 +16,7 @@ Tensor::Tensor(vector<int> input_shape) {
     return;
 }
 
-int Tensor::map_id(vector<int> id) {
+int Tensor::map_id(const& vector<int> id) {
     int prefactor = 1;
     int output = 0;
     for (int i=0; i<dimensions; i++) {
@@ -26,13 +26,13 @@ int Tensor::map_id(vector<int> id) {
     return output;
 }
 
-void Tensor::set_value(vector<int> id, double val) {
+void Tensor::set_value(const& vector<int> id, double val) {
     int i = map_id(id);
     vals[i] = val;
     return;
 }
 
-double Tensor::get_value(vector<int> id) {
+double Tensor::get_value(const& vector<int> id) {
     int i = map_id(id);
     return vals[i];
 }
