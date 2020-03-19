@@ -2,7 +2,19 @@
 
 using namespace std;
 
+Tensor::Tensor() {
+    shape.clear();
+    vals.clear();
+    dimensions = 0;
+    size = 0;
+}
+
 Tensor::Tensor(const& vector<int> input_shape) {
+    resize(input_shape);
+    return;
+}
+
+void Tensor::resize(const& vector<int> input_shape) {
     int local_size = 1;
     shape.clear();
     vals.clear();
@@ -13,7 +25,6 @@ Tensor::Tensor(const& vector<int> input_shape) {
     }
     size = local_size;
     vals.resize(size,0);
-    return;
 }
 
 int Tensor::map_id(const& vector<int> id) {
