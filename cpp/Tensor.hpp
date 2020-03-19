@@ -7,7 +7,7 @@ class Tensor {
     int dimensions;
     int map_id(const& std::vector<int> ids);
     public:
-        Tensor(const% std::vector<int> input_shape);
+        Tensor(const& std::vector<int> input_shape);
         void set_value(const& std::vector<int> id, double val);
         double get_value(const& std::vector<int> id);
 };
