@@ -1,4 +1,5 @@
 #include "Tensor.hpp"
+#include <assert.h>
 
 using namespace std;
 
@@ -9,12 +10,12 @@ Tensor::Tensor() {
     size = 0;
 }
 
-Tensor::Tensor(const& vector<int> input_shape) {
+Tensor::Tensor(const vector<int>& input_shape) {
     resize(input_shape);
     return;
 }
 
-void Tensor::resize(const& vector<int> input_shape) {
+void Tensor::resize(const vector<int>& input_shape) {
     int local_size = 1;
     shape.clear();
     vals.clear();
@@ -27,7 +28,7 @@ void Tensor::resize(const& vector<int> input_shape) {
     vals.resize(size,0);
 }
 
-int Tensor::map_id(const& vector<int> id) {
+int Tensor::map_id(const vector<int>& id) {
     int prefactor = 1;
     int output = 0;
     for (int i=0; i<dimensions; i++) {
@@ -37,13 +38,55 @@ int Tensor::map_id(const& vector<int> id) {
     return output;
 }
 
-void Tensor::set_value(const& vector<int> id, double val) {
+void Tensor::set_value(const vector<int>& id, double val) {
     int i = map_id(id);
     vals[i] = val;
     return;
 }
 
-double Tensor::get_value(const& vector<int> id) {
+double& Tensor::get_value(const vector<int>& id) {
     int i = map_id(id);
     return vals[i];
+}
+
+void Tensor::compare_sizes(const Tensor& a) {
+    assert(dimensions == a.dimensions);
+    assert(size == a.size);
+    for (int i=0;i<dimensions;i++) {
+        assert(shape[i] == a.shape[i]);
+    }
+    return;
+}
+
+double Tensor::operator *(const Tensor& a) {
+    compare_sizes(a);
+    double output = 0.0;
+    for (int i=0;i<size;i++) {
+        output += vals[i]*a.vals[i]; 
+    }
+    return output;
+}
+
+Tensor& Tensor::operator +(const Tensor& a) {
+    Tensor out(shape);
+    for (int i=0;i<size;i++) {
+        out.vals[i] = vals[i]+a.vals[i];
+    }
+    return out;
+}
+
+Tensor& Tensor::operator -(const Tensor& a) {
+    Tensor out(shape);
+    for (int i=0;i<size;i++) {
+        out.vals[i] = vals[i]-a.vals[i];
+    }
+    return out;
+}
+
+Tensor& Tensor::operator ^(const Tensor& a) {
+    Tensor out(shape);
+    for (int i=0;i<size;i++) {
+        out.vals[i] = vals[i]*a.vals[i];
+    }
+    return out;
 }
