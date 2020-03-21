@@ -49,7 +49,7 @@ double& Tensor::get_value(const vector<int>& id) {
     return vals[i];
 }
 
-void Tensor::compare_sizes(const Tensor& a) {
+void Tensor::compare_sizes (const Tensor& a) const {
     assert(dimensions == a.dimensions);
     assert(size == a.size);
     for (int i=0;i<dimensions;i++) {
@@ -58,35 +58,38 @@ void Tensor::compare_sizes(const Tensor& a) {
     return;
 }
 
-double Tensor::operator *(const Tensor& a) {
-    compare_sizes(a);
+double operator*(const Tensor& a, const Tensor &b) {
+    a.compare_sizes(b);
     double output = 0.0;
-    for (int i=0;i<size;i++) {
-        output += vals[i]*a.vals[i]; 
+    for (int i=0;i<a.size;i++) {
+        output += a.vals[i]*b.vals[i]; 
     }
     return output;
 }
 
-Tensor& Tensor::operator +(const Tensor& a) {
-    Tensor out(shape);
-    for (int i=0;i<size;i++) {
-        out.vals[i] = vals[i]+a.vals[i];
+Tensor operator+(const Tensor& a, const Tensor& b) {
+    a.compare_sizes(b);
+    Tensor out(a.shape);
+    for (int i=0;i<a.size;i++) {
+        out.vals[i] = a.vals[i]+b.vals[i];
     }
     return out;
 }
 
-Tensor& Tensor::operator -(const Tensor& a) {
-    Tensor out(shape);
-    for (int i=0;i<size;i++) {
-        out.vals[i] = vals[i]-a.vals[i];
+Tensor operator-(const Tensor& a, const Tensor& b) {
+    a.compare_sizes(b);
+    Tensor out(a.shape);
+    for (int i=0;i<a.size;i++) {
+        out.vals[i] = a.vals[i]-b.vals[i];
     }
     return out;
 }
 
-Tensor& Tensor::operator ^(const Tensor& a) {
-    Tensor out(shape);
-    for (int i=0;i<size;i++) {
-        out.vals[i] = vals[i]*a.vals[i];
+Tensor operator^(const Tensor& a, const Tensor& b) {
+    a.compare_sizes(b);
+    Tensor out(a.shape);
+    for (int i=0;i<a.size;i++) {
+        out.vals[i] = a.vals[i]*b.vals[i];
     }
     return out;
 }
