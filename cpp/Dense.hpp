@@ -10,7 +10,7 @@ class Dense {
     int numNeurons;
     public:
         Dense(int num_neurons);
-        vector<int> init_layer(const& vector<int> data_shape);
-        Tensor evaluate(const& Tensor input);
-        void Train();
+        void init_layer(const vector<int>& data_shape);
+        Tensor evaluate(const Tensor& input);
+        Tensor back_propagate(const Tensor& input);
 };
