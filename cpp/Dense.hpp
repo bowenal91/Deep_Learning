@@ -11,6 +11,7 @@ class Dense {
     public:
         Dense(int num_neurons);
         void init_layer(const vector<int>& data_shape);
+        void randomize_weights(double max);
         Tensor evaluate(const Tensor& input);
         Tensor back_propagate(const Tensor& input);
 };
