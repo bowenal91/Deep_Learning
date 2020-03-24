@@ -1,8 +1,9 @@
 #include "Dense.hpp"
 
-Dense::Dense(int num_neurons) {
+Dense::Dense(int num_neurons, std::string& activation_name) {
     numNeurons = num_neurons;
     ouput_shape.append(num_neurons);
+    act.set_activation(activation_name);
 }
 
 void Dense::init_layer(const vector<int>& data_shape) {
@@ -20,7 +21,7 @@ Tensor Dense::evaluate(const Tensor& input) {
     for (int i=0; i<num_neurons;i++) {
         vector<int> loc{i}
         result = input*weights[i]+biases[i];
-        //Do activation stuff here
+        result = act.evaluate(result);
         output.set_value(loc, result);
     }
 

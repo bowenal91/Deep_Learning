@@ -9,7 +9,7 @@ class Dense {
     Activation act;
     int numNeurons;
     public:
-        Dense(int num_neurons);
+        Dense(int num_neurons, std::string activation_name);
         void init_layer(const vector<int>& data_shape);
         void randomize_weights(double max);
         Tensor evaluate(const Tensor& input);
