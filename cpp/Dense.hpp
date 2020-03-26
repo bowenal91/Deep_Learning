@@ -1,13 +1,15 @@
 #include <vector>
 #include "Tensor.cpp"
+#include "Activation.cpp"
 
 class Dense {
     vector<int> input_shape;
     vector<int> output_shape;
     vector<Tensor> weights;
     vector<double> biases;
-    Activation act;
+    Activation *act;
     int numNeurons;
+    void set_activation(std::string& name);
     public:
         Dense(int num_neurons, std::string activation_name);
         void init_layer(const vector<int>& data_shape);

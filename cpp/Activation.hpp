@@ -2,13 +2,22 @@
 #include <functional>
 
 class Activation {
-    double ReLU(double input);
-    double d_ReLU(double input);
-    double d_Logistic(double input);
-    double Logistic(double input); 
     public:
         Activation();
-        void set_activation(std::string& name);
-        std::function<double(double)> evaluate;
-        std::function<double(double)> derivative;
+        virtual double evaluate(double x);
+        virtual double deriv(double x);
+};
+
+class ReLU : public Activation {
+    public: 
+        ReLU();
+        double evaluate(double x);
+        double deriv(double x);
+};
+
+class Logistic : public Activation {
+    public:
+        Logistic();
+        double evaluate();
+        double deriv();
 };
