@@ -11,7 +11,7 @@ class Dense {
     int numNeurons;
     void set_activation(std::string& name);
     public:
-        Dense(int num_neurons, std::string activation_name);
+        Dense(int num_neurons, std::string activation_name="None");
         void init_layer(const vector<int>& data_shape);
         void randomize_weights(double max);
         Tensor evaluate(const Tensor& input);

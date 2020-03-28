@@ -44,8 +44,17 @@ void Tensor::set_value(const vector<int>& id, double val) {
     return;
 }
 
-double& Tensor::get_value(const vector<int>& id) {
+void Tensor::set_value(const int id, double val) {
+    vals[i] = val;
+    return;
+}
+
+double Tensor::get_value(const vector<int>& id) {
     int i = map_id(id);
+    return vals[i];
+}
+
+double Tensor::get_value(const int id) {
     return vals[i];
 }
 

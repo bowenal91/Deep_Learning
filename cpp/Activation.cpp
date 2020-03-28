@@ -1,22 +1,38 @@
 #include "Activation.hpp"
 
-Activation::Activation() {
+Activation::Activation(const vector<int> shape) {
+    input_size = shape;
     return;
 }
 
-virtual double Activation::evaluate(double x) {
-    return 0.0;
+Tensor Activation::evaluate(Tensor& x) {
+    Tensor output(input_size);
+    double value;
+    for (int i=0;i<x.size;i++) {
+        value = x.get_value(i);
+        output.set_value(i, point_wise_function(value));
+    }
+    extra_function(output);
+    return output;
 }
 
-virtual double Activation::deriv(double x) {
-    return 0.0;
+Tensor Activation::back_propagate(Tensor& x) {
+
 }
 
-ReLU::ReLU() {
+double Activation::point_wise_function(double x) {
+    return x;
+}
+
+void Activation::extra_function(Tensor& x) {
     return;
 }
 
-double ReLU::evaluate(double x) {
+double Activation::deriv(double x) {
+    return 1.0;
+}
+
+double ReLU::point_wise_function(double x) {
     return max(0.0,x);
 }
 
@@ -25,14 +41,22 @@ double ReLU::deriv(double x) {
     else {return 1.0;}
 }
 
-Logistic::Logistic() {
-    return;
-}
+double Logistic::point_wise_function(double x) {
+    double out = exp(x);
+    return 1.0/(1.0+out);
 
-double Logistic::evaluate(double x) {
-    return 0.0;
 }
 
 double Logistic::deriv(double x) {
-    return 0.0;
+    double out = point_wise_function(x);
+    return out*(1.0-out);
 }
+
+double SoftMax::point_wise_function(double x) {
+    return exp(x);
+}
+
+void SoftMax::extra_function(Tensor& x) {
+    return;
+}
+
