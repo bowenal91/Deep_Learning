@@ -9,6 +9,7 @@ class Dense {
     vector<double> biases;
     Activation *act;
     int numNeurons;
+    int batch_size;
     void set_activation(std::string& name);
     public:
         Dense(int num_neurons, std::string activation_name="None");

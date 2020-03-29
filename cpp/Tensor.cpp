@@ -6,7 +6,7 @@ using namespace std;
 Tensor::Tensor() {
     shape.clear();
     vals.clear();
-    dimensions = 0;
+    rank = 0;
     size = 0;
 }
 
@@ -19,8 +19,8 @@ void Tensor::resize(const vector<int>& input_shape) {
     int local_size = 1;
     shape.clear();
     vals.clear();
-    dimensions = input_shape.size();
-    for (int i=0;i<dimensions;i++) {
+    rank = input_shape.size();
+    for (int i=0;i<rank;i++) {
         shape.push_back(input_shape[i]);
         local_size *= input_shape[i];
     }
@@ -31,7 +31,7 @@ void Tensor::resize(const vector<int>& input_shape) {
 int Tensor::map_id(const vector<int>& id) {
     int prefactor = 1;
     int output = 0;
-    for (int i=0; i<dimensions; i++) {
+    for (int i=0; i<rank; i++) {
         output += id[i]*prefactor;
         prefactor *= shape[i];
     }
@@ -59,9 +59,9 @@ double Tensor::get_value(const int id) {
 }
 
 void Tensor::compare_sizes (const Tensor& a) const {
-    assert(dimensions == a.dimensions);
+    assert(rank == a.rank);
     assert(size == a.size);
-    for (int i=0;i<dimensions;i++) {
+    for (int i=0;i<rank;i++) {
         assert(shape[i] == a.shape[i]);
     }
     return;
@@ -101,4 +101,12 @@ Tensor operator^(const Tensor& a, const Tensor& b) {
         out.vals[i] = a.vals[i]*b.vals[i];
     }
     return out;
+}
+
+double Tensor::subset_mult(const vector<int> a_ids, const vector<int> b_ids, const Tensor& b) {
+    //Perform dot product using only a subset of the whole tensor. 
+    
+
+
+
 }

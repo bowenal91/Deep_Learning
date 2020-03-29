@@ -5,7 +5,7 @@ class Tensor {
     int map_id(const std::vector<int>& ids);
     public:
         int size;
-        int dimensions;
+        int rank;
         std::vector<int> shape;
         Tensor();
         Tensor(const std::vector<int>& input_shape);
@@ -19,6 +19,7 @@ class Tensor {
         friend Tensor operator+(const Tensor& a, const Tensor& b);
         friend Tensor operator-(const Tensor& a, const Tensor& b);
         friend Tensor operator^(const Tensor& a, const Tensor& b);
+        double subset_mult(const std::vector<int>& a_ids, const std::vector<int>& b_ids, const Tensor& b);
 };
 
 
