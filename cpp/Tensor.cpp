@@ -45,7 +45,7 @@ void Tensor::set_value(const vector<int>& id, double val) {
 }
 
 void Tensor::set_value(const int id, double val) {
-    vals[i] = val;
+    vals[id] = val;
     return;
 }
 
@@ -55,7 +55,7 @@ double Tensor::get_value(const vector<int>& id) {
 }
 
 double Tensor::get_value(const int id) {
-    return vals[i];
+    return vals[id];
 }
 
 void Tensor::compare_sizes (const Tensor& a) const {
@@ -103,10 +103,36 @@ Tensor operator^(const Tensor& a, const Tensor& b) {
     return out;
 }
 
-double Tensor::subset_mult(const vector<int> a_ids, const vector<int> b_ids, const Tensor& b) {
+double Tensor::iterate_indices(int d, vector<int>& size, vector<int>& start_a, vector<int>& start_b, vector<int>& a_id, vector<int>& b_id, Tensor& b) {
+    //d is dimension. ids is the value to be added to starts_a and starts_b to get their index. current_sum is the current_sum up to that point
+    double sum = 0.0;
+    for (int i=0;i<=size[d];i++) {
+        a_id[d] = start_a[d]+i;
+        b_id[d] = start_b[d]+i;
+        if (d==size.size()-1) {
+            sum += get_value(a_id) * b.get_value(b_id);
+        } else {
+            sum += iterate_indices(d+1,size,start_a,start_b,a_id,b_id,b);
+        }
+    }
+    return sum;
+}
+
+double Tensor::subset_mult(const vector<int>& a_ids, const vector<int>& b_ids, Tensor& b) {
     //Perform dot product using only a subset of the whole tensor. 
+    vector<int> sizes,start_a,start_b,curr_a,curr_b;
+    assert(a_ids.size() == b_ids.size() && rank == b.rank && 2*rank == a_ids.size());
+    for (int i=0;i<a_ids.size();i+=2) {
+        assert(a_ids[i+1]-a_ids[i] == b_ids[i+1]-b_ids[i]);
+        sizes.push_back(a_ids[i+1]-a_ids[i]);
+        start_a.push_back(a_ids[i]);
+        start_b.push_back(b_ids[i]);
+        curr_a.push_back(0.0);
+        curr_b.push_back(0.0);
+    }
+
+    //If all this is true then we can sweep through each element 
+    return iterate_indices(0,sizes,start_a,start_b,curr_a,curr_b,b);
     
-
-
 
 }

@@ -19,7 +19,8 @@ class Tensor {
         friend Tensor operator+(const Tensor& a, const Tensor& b);
         friend Tensor operator-(const Tensor& a, const Tensor& b);
         friend Tensor operator^(const Tensor& a, const Tensor& b);
-        double subset_mult(const std::vector<int>& a_ids, const std::vector<int>& b_ids, const Tensor& b);
+        double subset_mult(const std::vector<int>& a_ids, const std::vector<int>& b_ids, Tensor& b);
+        double iterate_indices(int d, std::vector<int>& size, std::vector<int>& start_a, std::vector<int>& start_b, std::vector<int>& a_id, std::vector<int>& b_id, Tensor& b); 
 };
 
 
