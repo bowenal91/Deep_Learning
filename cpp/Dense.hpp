@@ -1,3 +1,6 @@
+#ifndef DENSE_H
+#define DENSE_H
+
 #include <vector>
 #include "Tensor.cpp"
 #include "Activation.cpp"
@@ -5,7 +8,8 @@
 class Dense {
     vector<int> input_shape;
     vector<int> output_shape;
-    vector<Tensor> weights;
+    vector<int> weight_shape;
+    Tensor weights;
     vector<double> biases;
     Activation *act;
     int numNeurons;
@@ -15,6 +19,8 @@ class Dense {
         Dense(int num_neurons, std::string activation_name="None");
         void init_layer(const vector<int>& data_shape);
         void randomize_weights(double max);
-        Tensor evaluate(const Tensor& input);
-        Tensor back_propagate(const Tensor& input);
+        Tensor evaluate(Tensor& input);
+        Tensor back_propagate(Tensor& input);
 };
+
+#endif

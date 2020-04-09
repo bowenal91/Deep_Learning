@@ -1,6 +1,6 @@
 #include "Activation.hpp"
 
-Activation::Activation(const vector<int> shape) {
+Activation::Activation(const vector<int> &shape) {
     input_size = shape;
     return;
 }
@@ -60,3 +60,6 @@ void SoftMax::extra_function(Tensor& x) {
     return;
 }
 
+double SoftMax::deriv(double x) {
+    return 0.0;
+}
