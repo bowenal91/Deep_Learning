@@ -1,4 +1,7 @@
 #include "Activation.hpp"
+#include <math.h>
+
+using namespace std;
 
 Activation::Activation(const vector<int> &shape) {
     input_size = shape;

@@ -1,3 +1,6 @@
+#ifndef TENSOR_H
+#define TENSOR_H
+
 #include <vector>
 
 class Tensor {
@@ -23,4 +26,4 @@ class Tensor {
         double iterate_indices(int d, std::vector<int>& size, std::vector<int>& start_a, std::vector<int>& start_b, std::vector<int>& a_id, std::vector<int>& b_id, Tensor& b); 
 };
 
-
+#endif 

@@ -1,5 +1,6 @@
 #include "Dense.hpp"
 
+using namespace std;
 Dense::Dense(int num_neurons, std::string activation_name) {
     numNeurons = num_neurons;
     set_activation(activation_name);
