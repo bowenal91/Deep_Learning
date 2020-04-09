@@ -21,4 +21,3 @@ PYBIND11_MODULE(nn, m) {
         .def("subset_mult", &Tensor::subset_mult);
 
 }
-
