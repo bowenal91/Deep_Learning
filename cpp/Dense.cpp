@@ -11,11 +11,9 @@ void Dense::init_layer(const vector<int>& data_shape) {
     output_shape.clear();
     weight_shape.clear();
     biases.clear();
-    batch_size = data_shape[0];
-    output_shape.push_back(batch_size);
     output_shape.push_back(numNeurons);
     weight_shape.push_back(numNeurons);
-    for (int i=1;i<data_shape.size();i++) {
+    for (int i=0;i<data_shape.size();i++) {
         input_shape.push_back(data_shape[i]);
         weight_shape.push_back(data_shape[i]);
     }

@@ -18,7 +18,7 @@ void Activation::init_layer(const vector<int> &shape) {
 }
 
 Tensor Activation::evaluate(Tensor& x) {
-    Tensor output(input_size);
+    Tensor output(x.shape);
     double value;
     for (int i=0;i<x.size;i++) {
         value = x.get_value(i);
@@ -37,12 +37,14 @@ double Activation::point_wise_function(double x) {
 }
 
 void Activation::extra_function(Tensor& x) {
+    
     return;
 }
 
 double Activation::deriv(double x) {
     return 1.0;
 }
+
 
 double ReLU::point_wise_function(double x) {
     return max(0.0,x);
@@ -69,9 +71,11 @@ double SoftMax::point_wise_function(double x) {
 }
 
 void SoftMax::extra_function(Tensor& x) {
+    x = x.normalize(axis);
     return;
 }
 
 double SoftMax::deriv(double x) {
-    return 0.0;
+    //Note this is not the derivative - it's the derivative in terms of y 
+    return x*(1-x);
 }

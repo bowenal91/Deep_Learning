@@ -16,6 +16,7 @@ class Activation : public Layer {
         virtual void extra_function(Tensor& x);
         Tensor back_propagate(Tensor& x) override;
         virtual double deriv(double x);
+        void normalize(Tensor &x, int axis);
 };
 
 class ReLU : public Activation {
@@ -33,8 +34,10 @@ class Logistic : public Activation {
 };
 
 class SoftMax : public Activation {
+    Tensor normalizations;
+    int axis;
     public:
-        SoftMax(const std::vector<int>& shape) : Activation(shape) {}
+        SoftMax(const std::vector<int>& shape, int axis) : Activation(shape) {axis = axis;}
         double point_wise_function(double x) override;
         double deriv(double x) override;
         void extra_function(Tensor& x) override;

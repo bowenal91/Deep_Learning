@@ -182,3 +182,37 @@ Tensor Tensor::collapse(int axis) {
     iterate_collapse(collapsed_tensor, ids, collapsed_ids, axis, 0);
     return collapsed_tensor;
 }
+
+void Tensor::iterate_normalize(Tensor &output, Tensor &collapsed, vector<int> &ids, vector<int> &collapsed_ids, int axis, int d) {
+    for (int i=0;i<shape[d];i++) {
+        ids[d] = i;
+        if (d != axis) {
+            collapsed_ids = i;
+        } else {
+            collapsed_ids = 0;
+        }
+
+        if (d==rank-1) {
+            output.set_value(ids, get_value(ids)/collapsed.get_value(collapsed_ids)); 
+        } else {
+            iterate_normalize(output, ids, collapsed_ids, axis, d+1);
+        }
+
+    }
+}
+
+Tensor Tensor::normalize(int axis) {
+    vector<int> newshape = shape;
+    Tensor output(newshape);
+    Tensor collapsed = output.collapse();
+    vector<int> ids, collapsed_ids;
+    for (int i=0;i<rank;i++) {
+        ids.push_back(0);
+        collapsed_ids.push_back(0);
+    }
+
+    iterate_normalize(output,collapsed,ids,collapsed_ids,axis,0);
+
+    return output;
+
+}

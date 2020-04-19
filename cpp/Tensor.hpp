@@ -29,6 +29,8 @@ class Tensor {
         double iterate_indices(int d, std::vector<int>& size, std::vector<int>& start_a, std::vector<int>& start_b, std::vector<int>& a_id, std::vector<int>& b_id, Tensor& b); 
         Tensor collapse(int axis);
         void iterate_collapse(Tensor &output, vector<int> &ids, vector<int> &collapsed_ids, int axis, int d);
+        Tensor normalize(int axis);
+        void iterate_normalize(Tensor &output, Tensor &collapsed, vector<int> &ids, vector<int> &collapsed_ids, int axis, int d);
 };
 
 #endif 
