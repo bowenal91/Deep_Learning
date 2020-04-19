@@ -28,6 +28,18 @@ void Tensor::resize(const vector<int>& input_shape) {
     vals.resize(size,0);
 }
 
+int Tensor::get_size() {
+    return size;
+}
+
+int Tensor::get_rank() {
+    return rank;
+}
+
+vector<int> Tensor::get_shape() {
+    return shape;
+}
+
 int Tensor::map_id(const vector<int>& id) {
     int prefactor = 1;
     int output = 0;
@@ -135,4 +147,38 @@ double Tensor::subset_mult(const vector<int>& a_ids, const vector<int>& b_ids, T
     return iterate_indices(0,sizes,start_a,start_b,curr_a,curr_b,b);
     
 
+}
+
+void Tensor::iterate_collapse(Tensor &output, vector<int> &ids, vector<int> &collapsed_ids, int axis, int d) {
+    for (int i=0;i<shape[d];i++) {
+        ids[d] = i;
+        if (d != axis) {
+            collapsed_ids = i;
+        } else {
+            collapsed_ids = 0;
+        }
+
+        if (d==rank-1) {
+            output.set_value(collapsed_ids, output.get_value(collapsed_ids) + get_value(ids)); 
+        } else {
+            iterate_collapse(output, ids, collapsed_ids, axis, d+1);
+        }
+    }
+
+    return;
+
+}
+
+Tensor Tensor::collapse(int axis) {
+    //Produces sum of all elements along axis
+    vector<int> newshape = shape;
+    shape[axis] = 1;
+    Tensor collapsed_tensor(newshape);
+    vector<int> ids, collapsed_ids;
+    for (int i=0;i<rank;i++) {
+        ids.push_back(0);
+        collapsed_ids.push_back(0);
+    }
+    iterate_collapse(collapsed_tensor, ids, collapsed_ids, axis, 0);
+    return collapsed_tensor;
 }

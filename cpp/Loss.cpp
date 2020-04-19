@@ -25,7 +25,7 @@ double Loss::calculate_loss(Tensor &y_pred, Tensor &y_label) {
 }
 
 Tensor Loss::back_propagate() {
-    return error_deriv;
+    return error_deriv.collapse();
 }
 
 double MSE::point_wise_func(double x_pred, double x_label) {
