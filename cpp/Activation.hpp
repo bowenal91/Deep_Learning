@@ -3,15 +3,18 @@
 
 #include <vector>
 #include "Tensor.hpp"
+#include "Layer.hpp"
 
-class Activation {
+class Activation : public Layer {
     std::vector<int> input_size;
     public:
+        Activation();
         Activation(const std::vector<int>& shape);
-        Tensor evaluate(Tensor& x);
+        void init_layer(const std::vector<int> &shape) override;
+        Tensor evaluate(Tensor& x) override;
         virtual double point_wise_function(double x);
         virtual void extra_function(Tensor& x);
-        Tensor back_propagate(Tensor& x);
+        Tensor back_propagate(Tensor& x) override;
         virtual double deriv(double x);
 };
 

@@ -1,24 +1,25 @@
-#ifndef DENSE_H
-#define DENSE_H
+#ifndef CONV_H
+#define CONV_H
 
 #include <vector>
 #include "Tensor.hpp"
 #include "Layer.hpp"
 #include "Activation.hpp"
-#include <string>
 
-class Dense : public Layer {
+class Conv : public Layer {
     std::vector<int> input_shape;
     std::vector<int> output_shape;
     std::vector<int> weight_shape;
+    int filter_size;
+    int filter_dimension;
     Tensor weights;
     std::vector<double> biases;
     Activation *act;
-    int numNeurons;
+    int num_filters;
     int batch_size;
     void set_activation(std::string& name);
     public:
-        Dense(int num_neurons, std::string activation_name="None");
+        Conv(int numFilters, int filterSize, std::string activation_name="None");
         void init_layer(const std::vector<int>& data_shape) override;
         void randomize_weights(double max);
         Tensor evaluate(Tensor& input) override;

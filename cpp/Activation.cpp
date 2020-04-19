@@ -3,7 +3,16 @@
 
 using namespace std;
 
+Activation::Activation() {
+    return;
+}
+
 Activation::Activation(const vector<int> &shape) {
+    input_size = shape;
+    return;
+}
+
+void Activation::init_layer(const vector<int> &shape) {
     input_size = shape;
     return;
 }
