@@ -5,13 +5,15 @@
 #include "Tensor.cpp"
 
 class Loss {
-    Tensor error_deriv;
+    vector<Tensor> error_out;
     public:
         Loss() {};
-        double calculate_loss(Tensor &y_pred, &Tensor y_label);
+        double calculate_loss(vector<Tensor> &y_pred, vector<Tensor> &y_label);
+        double calculate_loss(Tensor &y_pred, Tensor &y_label);
         virtual double point_wise_func(double x_pred, double x_label);
         virtual double deriv(double x_pred, double x_label);
-        Tensor back_propagate();
+        std::vector<Tensor> back_propagate();
+        Tensor calc_deriv(Tensor &y_pred, &y_label, double prefactor);
 };
 
 class MSE : public Loss {

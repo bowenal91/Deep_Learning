@@ -5,27 +5,48 @@
 using namespace std;
 
 double Loss::calculate_loss(Tensor &y_pred, Tensor &y_label) {
-    assert(y_pred.size == y_label.size);
-    assert(y_pred.rank == y_label.rank);
-    for (int i=0;i<y_pred.rank;i++) {
-        assert(y_pred.shape[i] == y_label.shape[i]);
+    double loss = 0.0;
+    assert(y_pred.get_size() == y_label.get_size());
+    for (int i=0; i<y_pred.get_size(); i++) {
+        loss += point_wise_func(y_pred.get_value(i), y_label.get_value(i));
     }
 
-    int batch_size = y_pred.shape[0];
+    return loss;
+}
+
+Tensor Loss::calc_deriv(Tensor &y_pred, Tensor &y_label, double prefactor) {
+    int i;
+    assert(y_pred.get_rank() == y_label.get_rank());
+    for (i=0;i<y_pred.get_rank();i++) {
+        assert(y_pred.get_shape(i) == y_label.get_shape(i));
+    }
+    Tensor output(y_pred.get_shape());
+    
+    for (i=0;i<y_pred.size();i++) {
+        output.set_value(i, prefactor*deriv(y_pred.get_value(i), y_label.get_value(i)));
+    }
+    return output;
+}
+
+double Loss::calculate_loss(vector<Tensor> &y_pred, vector<Tensor> &y_label) {
+    assert(y_pred.size() == y_label.size());
+    assert(y_pred.size() > 0);
+    
+
+    int batch_size = y_pred.size();
     double prefactor = 1.0/double(batch_size);
     double error = 0.0;
-    error_deriv.resize(y_pred.shape);
-
-    for (int i=0;i<y_pred.size;i++) {
-        error += point_wise_func(y_pred.get_value(i), y_label.get_value(i));
-        error_deriv.set_value(i, prefactor*deriv(i, y_pred.get_value(i), y_label.get_value(i)));
+    error_out.clear();
+    for (int i=0; i<batch_size; i++) {
+        error += calculate_loss(y_pred[i],y_label[i]);
+        error_out.push_back(calc_deriv(y_pred[i],y_label[i],prefactor);
     }
 
     return prefactor*error;
 }
 
 Tensor Loss::back_propagate() {
-    return error_deriv.collapse();
+    return error_out;
 }
 
 double MSE::point_wise_func(double x_pred, double x_label) {
