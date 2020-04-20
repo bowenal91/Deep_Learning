@@ -13,6 +13,7 @@ class Tensor {
         int get_size();
         int get_rank();
         std::vector<int> get_shape();
+        int get_shape(int i);
         Tensor();
         Tensor(const std::vector<int>& input_shape);
         void set_value(const std::vector<int>& id, double val);

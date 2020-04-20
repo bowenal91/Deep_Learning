@@ -40,6 +40,10 @@ vector<int> Tensor::get_shape() {
     return shape;
 }
 
+int Tensor::get_shape(int i) {
+    return shape[i];
+}
+
 int Tensor::map_id(const vector<int>& id) {
     int prefactor = 1;
     int output = 0;
