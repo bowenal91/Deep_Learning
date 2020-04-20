@@ -28,8 +28,38 @@ Tensor Activation::evaluate(Tensor& x) {
     return output;
 }
 
-Tensor Activation::back_propagate(Tensor& x) {
+vector<Tensor> Activation::evaluate(vector<Tensor> &x) {
+    vector<Tensor> output;
+    for (int i=0;i<x.size();i++) {
+        output.push_back(evaluate(x[i]));
+    }
+    return output;
+}
 
+Tensor Activation::back_propagate(Tensor &forward, Tensor &backward) {
+    vector<Tensor> output, forward2;
+    forward2 = forward;
+    double value;
+    
+    for (int i=0;i<forward.size;i++) {
+        value = backward.get_value(i);
+        value *= deriv(forward2.get_value(i));
+        output.set_value(i,value);
+    }
+    return output;
+   
+}
+
+vector<Tensor> Activation::back_propagate(vector<Tensor> &forward, vector<Tensor> &backward) {
+    vector<Tensor> output;
+    for (int i=0;i<forward.size();i++) {
+        output.push_back(back_propagate(forward[i],backward[i]));
+    }
+    return output;
+}
+
+vector<Tensor> Activation::update_propagate(vector<Tensor> &forward, vector<Tensor> &backward, double rate=0.0) {
+    return back_propagate(forward,backward); 
 }
 
 double Activation::point_wise_function(double x) {
@@ -78,4 +108,8 @@ void SoftMax::extra_function(Tensor& x) {
 double SoftMax::deriv(double x) {
     //Note this is not the derivative - it's the derivative in terms of y 
     return x*(1-x);
+}
+
+void SoftMax::extra_function_deriv(Tensor& x) {
+    x = evaluate(x);
 }

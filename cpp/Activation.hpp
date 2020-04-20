@@ -12,11 +12,14 @@ class Activation : public Layer {
         Activation(const std::vector<int>& shape);
         void init_layer(const std::vector<int> &shape) override;
         Tensor evaluate(Tensor& x) override;
+        vector<Tensor> evaluate(vector<Tensor>& x) override;
         virtual double point_wise_function(double x);
         virtual void extra_function(Tensor& x);
-        Tensor back_propagate(Tensor& x) override;
+        virtual void extra_function_deriv(Tensor& x) {};
+        Tensor back_propagate(Tensor& forward, Tensor &backward) override;
+        vector<Tensor> back_propagate(vector<Tensor>& forward, vector<Tensor> &backward) override;
+        vector<Tensor> update_propagate(vector<Tensor>& forward, vector<Tensor> &backward, double rate=0.0) override;
         virtual double deriv(double x);
-        void normalize(Tensor &x, int axis);
 };
 
 class ReLU : public Activation {
@@ -41,6 +44,7 @@ class SoftMax : public Activation {
         double point_wise_function(double x) override;
         double deriv(double x) override;
         void extra_function(Tensor& x) override;
+        void extra_function_deriv(Tensor &x) override;
 };
 
 #endif
