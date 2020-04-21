@@ -8,8 +8,16 @@ Activation::Activation() {
 }
 
 Activation::Activation(const vector<int> &shape) {
-    input_size = shape;
+    init_layer(shape);
     return;
+}
+
+Activation::Activation(Layer *prev) {
+    init_layer(prev->get_output_shape());
+}
+
+vector<int> Activation::get_output_shape() {
+    return input_size;
 }
 
 void Activation::init_layer(const vector<int> &shape) {
@@ -18,9 +26,9 @@ void Activation::init_layer(const vector<int> &shape) {
 }
 
 Tensor Activation::evaluate(Tensor& x) {
-    Tensor output(x.shape);
+    Tensor output(x.get_shape());
     double value;
-    for (int i=0;i<x.size;i++) {
+    for (int i=0;i<x.get_size();i++) {
         value = x.get_value(i);
         output.set_value(i, point_wise_function(value));
     }
@@ -41,7 +49,7 @@ Tensor Activation::back_propagate(Tensor &forward, Tensor &backward) {
     forward2 = forward;
     double value;
     
-    for (int i=0;i<forward.size;i++) {
+    for (int i=0;i<forward.get_size();i++) {
         value = backward.get_value(i);
         value *= deriv(forward2.get_value(i));
         output.set_value(i,value);

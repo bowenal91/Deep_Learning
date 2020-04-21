@@ -10,6 +10,8 @@ class Activation : public Layer {
     public:
         Activation();
         Activation(const std::vector<int>& shape);
+        Activation(Layer *prev);
+        std::vector<int> get_output_shape() override;
         void init_layer(const std::vector<int> &shape) override;
         Tensor evaluate(Tensor& x) override;
         vector<Tensor> evaluate(vector<Tensor>& x) override;

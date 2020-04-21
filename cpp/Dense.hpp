@@ -16,6 +16,9 @@ class Dense : public Layer {
     int batch_size;
     public:
         Dense(int num_neurons);
+        Dense(int num_neurons, const std::vector<int> &data_shape);
+        Dense(int num_neurons, Layer *prev);
+        std::vector<int> get_output_shape() override;
         void init_layer(const std::vector<int>& data_shape) override;
         void randomize_weights(double max);
         Tensor evaluate(Tensor& input) override;

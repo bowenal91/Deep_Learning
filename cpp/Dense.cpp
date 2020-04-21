@@ -5,6 +5,16 @@ Dense::Dense(int num_neurons) {
     numNeurons = num_neurons;
 }
 
+Dense::Dense(int num_neurons, const vector<int> &data_shape) {
+    numNeurons = num_neurons;
+    init_layer(data_shape);
+}
+
+Dense::Dense(int num_neurons, Layer *prev) {
+    numNeurons = num_neurons;
+    init_layer(prev->get_output_shape());
+}
+
 void Dense::init_layer(const vector<int>& data_shape) {
     input_shape.clear();
     output_shape.clear();
@@ -19,6 +29,10 @@ void Dense::init_layer(const vector<int>& data_shape) {
         biases.push_back(0.0);
     }
     return; 
+}
+
+vector<int> Dense::get_output_shape() {
+    return output_shape;
 }
 
 Tensor Dense::evaluate(Tensor& input) {
