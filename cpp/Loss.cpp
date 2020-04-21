@@ -22,7 +22,7 @@ Tensor Loss::calc_deriv(Tensor &y_pred, Tensor &y_label, double prefactor) {
     }
     Tensor output(y_pred.get_shape());
     
-    for (i=0;i<y_pred.size();i++) {
+    for (i=0;i<y_pred.get_size();i++) {
         output.set_value(i, prefactor*deriv(y_pred.get_value(i), y_label.get_value(i)));
     }
     return output;
@@ -39,13 +39,13 @@ double Loss::calculate_loss(vector<Tensor> &y_pred, vector<Tensor> &y_label) {
     error_out.clear();
     for (int i=0; i<batch_size; i++) {
         error += calculate_loss(y_pred[i],y_label[i]);
-        error_out.push_back(calc_deriv(y_pred[i],y_label[i],prefactor);
+        error_out.push_back(calc_deriv(y_pred[i],y_label[i],prefactor));
     }
 
     return prefactor*error;
 }
 
-Tensor Loss::back_propagate() {
+vector<Tensor> Loss::back_propagate() {
     return error_out;
 }
 

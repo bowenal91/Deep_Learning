@@ -51,12 +51,53 @@ Tensor Dense::evaluate(Tensor& input) {
 vector<Tensor> Dense::evaluate(vector<Tensor> &input) {
     vector<Tensor> output;
     for (int i=0;i<input.size();i++) {
-        output.push_back(evaluate(input[i]);
+        output.push_back(evaluate(input[i]));
     }
     return output;
 }
 
-Tensor Dense::back_propagate(Tensor& input) {
+Tensor Dense::back_propagate(Tensor &forward, Tensor &backward) {
     Tensor output(input_shape);
-    double result;
+    double sum;
+    for (int i=0;i<forward.get_size();i++) {
+        sum = 0.0;
+        for (int j=0;j<backward.get_size();j++) {
+            sum += backward.get_value(j)*weights[j].get_value(i);
+        }
+        output.set_value(i,sum);
+    }
+    return output;
+}
+
+vector<Tensor> Dense::back_propagate(vector<Tensor> &forward, vector<Tensor> &backward) {
+    vector<Tensor> output;
+    for (int i=0;i<forward.size();i++) {
+        output.push_back(back_propagate(forward[i],backward[i]));
+    }
+    return output;
+}
+
+void Dense::update_weights(vector<Tensor> &forward, vector<Tensor> &backward, double rate) {
+    vector<Tensor> updates;
+    int i;
+    for (i=0;i<numNeurons;i++) {
+        Tensor t(input_shape);
+        updates.push_back(t);
+    }
+
+    for (i=0;i<forward.size();i++) {
+        for (int j=0;j<numNeurons;j++) {
+            updates[j] = updates[j] + backward[i].get_value(j)*forward[i];
+        }
+    }
+
+    for (i=0;i<numNeurons;i++) {
+        weights[i] = weights[i] - rate*updates[i];
+    }
+}
+
+vector<Tensor> Dense::update_propagate(vector<Tensor> &forward, vector<Tensor> &backward, double rate) {
+    vector<Tensor> output = back_propagate(forward,backward);
+    update_weights(forward,backward,rate);
+    return output;
 }

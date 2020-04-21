@@ -1,19 +1,19 @@
 #ifndef LOSS_H
 #define LOSS_H
 
+#include "Tensor.hpp"
 #include <vector>
-#include "Tensor.cpp"
 
 class Loss {
-    vector<Tensor> error_out;
+    std::vector<Tensor> error_out;
     public:
         Loss() {};
-        double calculate_loss(vector<Tensor> &y_pred, vector<Tensor> &y_label);
+        double calculate_loss(std::vector<Tensor> &y_pred, std::vector<Tensor> &y_label);
         double calculate_loss(Tensor &y_pred, Tensor &y_label);
-        virtual double point_wise_func(double x_pred, double x_label);
-        virtual double deriv(double x_pred, double x_label);
+        virtual double point_wise_func(double x_pred, double x_label) {};
+        virtual double deriv(double x_pred, double x_label) {};
         std::vector<Tensor> back_propagate();
-        Tensor calc_deriv(Tensor &y_pred, &y_label, double prefactor);
+        Tensor calc_deriv(Tensor &y_pred, Tensor &y_label, double prefactor);
 };
 
 class MSE : public Loss {
@@ -29,7 +29,7 @@ class MAE : public Loss {
         MAE() : Loss() {};
         double point_wise_func(double x_pred, double x_label) override;
         double deriv(double x_pred, double x_label) override;
-}
+};
 
 class Binary_Cross_Entropy : public Loss {
     public:
@@ -45,6 +45,6 @@ class Categorical_Cross_Entropy : public Loss {
         double point_wise_func(double x_pred, double x_label) override;
         double deriv(double x_pred, double x_label) override;
    
-}
+};
 
 #endif

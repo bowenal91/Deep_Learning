@@ -14,13 +14,13 @@ class Activation : public Layer {
         std::vector<int> get_output_shape() override;
         void init_layer(const std::vector<int> &shape) override;
         Tensor evaluate(Tensor& x) override;
-        vector<Tensor> evaluate(vector<Tensor>& x) override;
+        std::vector<Tensor> evaluate(std::vector<Tensor>& x) override;
         virtual double point_wise_function(double x);
         virtual void extra_function(Tensor& x);
         virtual void extra_function_deriv(Tensor& x) {};
         Tensor back_propagate(Tensor& forward, Tensor &backward) override;
-        vector<Tensor> back_propagate(vector<Tensor>& forward, vector<Tensor> &backward) override;
-        vector<Tensor> update_propagate(vector<Tensor>& forward, vector<Tensor> &backward, double rate=0.0) override;
+        std::vector<Tensor> back_propagate(std::vector<Tensor>& forward, std::vector<Tensor> &backward) override;
+        std::vector<Tensor> update_propagate(std::vector<Tensor>& forward, std::vector<Tensor> &backward, double rate=0.0) override;
         virtual double deriv(double x);
 };
 

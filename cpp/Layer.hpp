@@ -8,6 +8,7 @@
 class Layer {
     public:
         Layer() {};
+        virtual std::vector<int> get_output_shape() {};
         virtual void init_layer(const std::vector<int> &shape) {};
         virtual Tensor evaluate(Tensor& input) {};
         virtual std::vector<Tensor> evaluate(std::vector<Tensor> &input) {};

@@ -165,9 +165,9 @@ void Tensor::iterate_collapse(Tensor &output, vector<int> &ids, vector<int> &col
     for (int i=0;i<shape[d];i++) {
         ids[d] = i;
         if (d != axis) {
-            collapsed_ids = i;
+            collapsed_ids[d] = i;
         } else {
-            collapsed_ids = 0;
+            collapsed_ids[d] = 0;
         }
 
         if (d==rank-1) {
@@ -199,15 +199,15 @@ void Tensor::iterate_normalize(Tensor &output, Tensor &collapsed, vector<int> &i
     for (int i=0;i<shape[d];i++) {
         ids[d] = i;
         if (d != axis) {
-            collapsed_ids = i;
+            collapsed_ids[d] = i;
         } else {
-            collapsed_ids = 0;
+            collapsed_ids[d] = 0;
         }
 
         if (d==rank-1) {
             output.set_value(ids, get_value(ids)/collapsed.get_value(collapsed_ids)); 
         } else {
-            iterate_normalize(output, ids, collapsed_ids, axis, d+1);
+            iterate_normalize(output, collapsed, ids, collapsed_ids, axis, d+1);
         }
 
     }
@@ -216,7 +216,7 @@ void Tensor::iterate_normalize(Tensor &output, Tensor &collapsed, vector<int> &i
 Tensor Tensor::normalize(int axis) {
     vector<int> newshape = shape;
     Tensor output(newshape);
-    Tensor collapsed = output.collapse();
+    Tensor collapsed = output.collapse(axis);
     vector<int> ids, collapsed_ids;
     for (int i=0;i<rank;i++) {
         ids.push_back(0);
@@ -227,4 +227,12 @@ Tensor Tensor::normalize(int axis) {
 
     return output;
 
+}
+
+double Tensor::sum() {
+    double output = 0.0;
+    for (int i=0;i<size;i++) {
+        output += vals[i];
+    }
+    return output;
 }
