@@ -5,14 +5,16 @@ Dense::Dense(int num_neurons) {
     numNeurons = num_neurons;
 }
 
-Dense::Dense(int num_neurons, const vector<int> &data_shape) {
+Dense::Dense(int num_neurons, const vector<int> &data_shape, string &weight_init) {
     numNeurons = num_neurons;
     init_layer(data_shape);
+    init_weights(weight_init);
 }
 
-Dense::Dense(int num_neurons, Layer *prev) {
+Dense::Dense(int num_neurons, Layer *prev, string &weight_init) {
     numNeurons = num_neurons;
     init_layer(prev->get_output_shape());
+    init_weights(weight_init);
 }
 
 void Dense::init_layer(const vector<int>& data_shape) {
@@ -29,6 +31,14 @@ void Dense::init_layer(const vector<int>& data_shape) {
         biases.push_back(0.0);
     }
     return; 
+}
+
+void Dense::init_weights(string &init_name) {
+    InitializerFactory f;
+    init = f.create(init_name);
+    for (int i = 0;i<numNeurons;i++) {
+        weights[i] = init->init_weights(weights[i].get_shape(), weights[i].get_size(), numNeurons);
+    }
 }
 
 vector<int> Dense::get_output_shape() {
