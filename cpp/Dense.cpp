@@ -37,12 +37,10 @@ vector<int> Dense::get_output_shape() {
 
 Tensor Dense::evaluate(Tensor& input) {
     Tensor output(output_shape);
-    vector<int> id{0};
     double result;
     for (int i=0; i<numNeurons;i++) {
-        id[0] = i;
         result = weights[i]*input + biases[i];
-        output.set_value(id, result); 
+        output.set_value(i, result); 
     }
 
     return output;
@@ -58,8 +56,6 @@ vector<Tensor> Dense::evaluate(vector<Tensor> &input) {
 
 Tensor Dense::back_propagate(Tensor &forward, Tensor &backward) {
     Tensor output(input_shape);
-    double sum;
-
     for (int i=0;i<numNeurons;i++) {
         output = output + backward.get_value(i)*weights[i];
     }
