@@ -7,16 +7,16 @@
 #include "Tensor.hpp"
 
 class Initializer {
-    std::mt19937 *mt; 
-    public: 
+    public:
+        std::mt19937 mt;
         Initializer();
-        virtual std::vector<Tensor> init_weights(std::vector<int> &shape, int numInputs, int numOutputs) {};
+        virtual Tensor init_weights(std::vector<int> &shape, int numInputs, int numOutputs) {};
 };
 
 class Glorot_Uniform : public Initializer {
     public:
         Glorot_Uniform() : Initializer() {};
-        std::vector<Tensor> init_weights(std::vector<int> &shape, int numInputs, int numOutputs) override;
+        Tensor init_weights(std::vector<int> &shape, int numInputs, int numOutputs) override;
 };
 
 class InitializerFactory {

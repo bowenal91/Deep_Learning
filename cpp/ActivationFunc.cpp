@@ -1,4 +1,4 @@
-#include "ActivationFuncFunc.hpp"
+#include "ActivationFunc.hpp"
 #include <math.h>
 
 using namespace std;
@@ -45,7 +45,7 @@ vector<Tensor> ActivationFunc::evaluate(vector<Tensor> &x) {
 }
 
 Tensor ActivationFunc::back_propagate(Tensor &forward, Tensor &backward) {
-    vector<Tensor> output, forward2;
+    Tensor output, forward2;
     forward2 = forward;
     double value;
     
@@ -66,7 +66,7 @@ vector<Tensor> ActivationFunc::back_propagate(vector<Tensor> &forward, vector<Te
     return output;
 }
 
-vector<Tensor> ActivationFunc::update_propagate(vector<Tensor> &forward, vector<Tensor> &backward, double rate=0.0) {
+vector<Tensor> ActivationFunc::update_propagate(vector<Tensor> &forward, vector<Tensor> &backward, double rate) {
     return back_propagate(forward,backward); 
 }
 
