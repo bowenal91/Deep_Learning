@@ -127,6 +127,38 @@ Tensor operator*(const double a, const Tensor& b) {
     return out;
 }
 
+Tensor operator+(const double a, const Tensor& b) {
+    Tensor out(b.shape);
+    for (int i=0; i<b.size;i++) {
+        out.vals[i] = a+b.vals[i];
+    }
+    return out;
+}
+
+Tensor operator-(const double a, const Tensor& b) {
+    Tensor out(b.shape);
+    for (int i=0; i<b.size;i++) {
+        out.vals[i] = a-b.vals[i];
+    }
+    return out;
+}
+
+Tensor operator+(const Tensor& a, const double b) {
+    Tensor out(a.shape);
+    for (int i=0; i<a.size;i++) {
+        out.vals[i] = b+a.vals[i];
+    }
+    return out;
+}
+
+Tensor operator-(const Tensor& a, const double b) {
+    Tensor out(a.shape);
+    for (int i=0; i<a.size;i++) {
+        out.vals[i] = -b+a.vals[i];
+    }
+    return out;
+}
+
 double Tensor::iterate_indices(int d, vector<int>& size, vector<int>& start_a, vector<int>& start_b, vector<int>& a_id, vector<int>& b_id, Tensor& b) {
     //d is dimension. ids is the value to be added to starts_a and starts_b to get their index. current_sum is the current_sum up to that point
     double sum = 0.0;

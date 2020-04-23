@@ -26,6 +26,10 @@ class Tensor {
         friend Tensor operator+(const Tensor& a, const Tensor& b);
         friend Tensor operator-(const Tensor& a, const Tensor& b);
         friend Tensor operator^(const Tensor& a, const Tensor& b);
+        friend Tensor operator+(const double a, const Tensor& b);
+        friend Tensor operator+(const Tensor &a, const double b);
+        friend Tensor operator-(const double a, const Tensor& b);
+        friend Tensor operator-(const Tensor &a, const double b);
         friend Tensor operator*(const double a, const Tensor& b);
         double sum();
         double subset_mult(const std::vector<int>& a_ids, const std::vector<int>& b_ids, Tensor& b);
