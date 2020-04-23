@@ -7,11 +7,12 @@
 #include "Tensor.hpp"
 
 class Regularizer {
-    double lambda;
     public:
-        Regularizer(double L) {lambda{L}}; 
+        double lambda;
+        Regularizer(double L) {lambda=L;} 
         virtual double calc_loss(Tensor &input) {};
         virtual Tensor calc_deriv(Tensor &input) {};
+        virtual double calc_deriv(double input) {};
 };
 
 class Ridge : public Regularizer {
@@ -19,6 +20,7 @@ class Ridge : public Regularizer {
         Ridge(double L) : Regularizer(L) {};
         double calc_loss(Tensor &input) override;
         Tensor calc_deriv(Tensor &input) override;
+        double calc_deriv(double input) override;
 };
 
 class Lasso : public Regularizer {
@@ -26,6 +28,7 @@ class Lasso : public Regularizer {
         Lasso(double L) : Regularizer(L) {};
         double calc_loss(Tensor &input) override;
         Tensor calc_deriv(Tensor &input) override;
+        double calc_deriv(double input) override;
 };
 
 #endif

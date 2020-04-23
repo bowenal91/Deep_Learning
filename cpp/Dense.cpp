@@ -7,22 +7,36 @@ Dense::Dense(int num_neurons) {
 
 Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init) {
     numNeurons = num_neurons;
-    init_layer(data_shape);
+    init_layer(data_shape, NULL);
     init_weights(weight_init);
 }
 
 Dense::Dense(int num_neurons, Layer *prev, string weight_init) {
     numNeurons = num_neurons;
-    init_layer(prev->get_output_shape());
+    init_layer(prev->get_output_shape(), NULL);
     init_weights(weight_init);
 }
 
-void Dense::init_layer(const vector<int>& data_shape) {
+
+Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init, Regularizer *regu) {
+    numNeurons = num_neurons;
+    init_layer(data_shape, regu);
+    init_weights(weight_init);
+}
+
+Dense::Dense(int num_neurons, Layer *prev, string weight_init, Regularizer *regu) {
+    numNeurons = num_neurons;
+    init_layer(prev->get_output_shape(), regu);
+    init_weights(weight_init);
+}
+
+void Dense::init_layer(const vector<int>& data_shape, Regularizer *regu) {
     input_shape.clear();
     output_shape.clear();
     weights.clear();
     biases.clear();
     output_shape.push_back(numNeurons);
+    reg = regu;
     for (int i=0;i<data_shape.size();i++) {
         input_shape.push_back(data_shape[i]);
     }
@@ -97,10 +111,18 @@ void Dense::update_weights(vector<Tensor> &forward, vector<Tensor> &backward, do
         }
     }
 
+    if (reg) {
+    }
+
     for (i=0;i<numNeurons;i++) {
+        if (reg) {
+            weights[i] = weights[i] - reg->calc_deriv(weights[i]);
+            biases[i] = biases[i] - reg->calc_deriv(biases[i]);
+        }
         weights[i] = weights[i] - rate*updates[i];
         biases[i] = biases[i] - rate*update_bias[i];
     }
+
 }
 
 vector<Tensor> Dense::update_propagate(vector<Tensor> &forward, vector<Tensor> &backward, double rate) {
