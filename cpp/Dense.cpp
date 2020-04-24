@@ -5,12 +5,17 @@ Dense::Dense(int num_neurons) {
     numNeurons = num_neurons;
 }
 
+Dense::Dense(int num_neurons, const vector<int> &data_shape) {
+    init_layer(num_neurons,data_shape, "glorot uniform", NULL);
+}
+
+
 Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init) {
     init_layer(num_neurons,data_shape, weight_init, NULL);
 }
 
 Dense::Dense(int num_neurons, Layer *prev, string weight_init) {
-    init_layer(num_neurons, prev->get_output_shape(), "glorot_uniform", NULL);
+    init_layer(num_neurons, prev->get_output_shape(), weight_init, NULL);
 }
 
 
@@ -20,6 +25,10 @@ Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init,
 
 Dense::Dense(int num_neurons, Layer *prev, string weight_init, Regularizer *regu) {
     init_layer(num_neurons,prev->get_output_shape(), weight_init, regu);
+}
+
+Dense::Dense(int num_neurons, Layer *prev) {
+    init_layer(num_neurons, prev->get_output_shape(), "glorot uniform", NULL);
 }
 
 void Dense::init_layer(int num_neurons, const vector<int>& data_shape, string weight_init, Regularizer *regu) {

@@ -8,7 +8,7 @@
 
 class Initializer {
     public:
-        std::mt19937 mt;
+        std::mt19937 *mt;
         Initializer();
         virtual Tensor init_weights(std::vector<int> &shape, int numInputs, int numOutputs) {};
 };

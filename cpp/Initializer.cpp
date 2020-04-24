@@ -6,7 +6,8 @@
 using namespace std;
 
 Initializer::Initializer() {
-    mt19937(chrono::high_resolution_clock::now().time_since_epoch().count());
+    mt = new mt19937(chrono::high_resolution_clock::now().time_since_epoch().count());
+    //mt = new mt19937(87);
 }
 
 Tensor Glorot_Uniform::init_weights(vector<int> &shape, int numInputs, int numOutputs) {
@@ -15,7 +16,7 @@ Tensor Glorot_Uniform::init_weights(vector<int> &shape, int numInputs, int numOu
     uniform_real_distribution<double> dist(-limit,limit);
     int size = output.get_size();
     for (int i=0;i<size;i++) {
-        output.set_value(i,dist(mt));
+        output.set_value(i,dist(*mt));
     }
 
     return output;
