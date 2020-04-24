@@ -23,7 +23,7 @@ class Dense : public Layer {
         Dense(int num_neurons, Layer *prev, std::string weight_init, Regularizer *regu);
         Dense(int num_neurons, Layer *prev, std::string weight_init);
         std::vector<int> get_output_shape() override;
-        void init_layer(const std::vector<int>& data_shape, Regularizer *regu);
+        void init_layer(int num_neurons, const std::vector<int>& data_shape, std::string weight_init, Regularizer *regu);
         void init_weights(std::string& init_name);
         Tensor evaluate(Tensor& input) override;
         std::vector<Tensor> evaluate(std::vector<Tensor>& input) override;

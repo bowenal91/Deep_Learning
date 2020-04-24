@@ -6,31 +6,24 @@ Dense::Dense(int num_neurons) {
 }
 
 Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init) {
-    numNeurons = num_neurons;
-    init_layer(data_shape, NULL);
-    init_weights(weight_init);
+    init_layer(num_neurons,data_shape, weight_init, NULL);
 }
 
 Dense::Dense(int num_neurons, Layer *prev, string weight_init) {
-    numNeurons = num_neurons;
-    init_layer(prev->get_output_shape(), NULL);
-    init_weights(weight_init);
+    init_layer(num_neurons, prev->get_output_shape(), "glorot_uniform", NULL);
 }
 
 
 Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init, Regularizer *regu) {
-    numNeurons = num_neurons;
-    init_layer(data_shape, regu);
-    init_weights(weight_init);
+    init_layer(num_neurons, data_shape, weight_init, regu);
 }
 
 Dense::Dense(int num_neurons, Layer *prev, string weight_init, Regularizer *regu) {
-    numNeurons = num_neurons;
-    init_layer(prev->get_output_shape(), regu);
-    init_weights(weight_init);
+    init_layer(num_neurons,prev->get_output_shape(), weight_init, regu);
 }
 
-void Dense::init_layer(const vector<int>& data_shape, Regularizer *regu) {
+void Dense::init_layer(int num_neurons, const vector<int>& data_shape, string weight_init, Regularizer *regu) {
+    numNeurons = num_neurons;
     input_shape.clear();
     output_shape.clear();
     weights.clear();
@@ -44,6 +37,7 @@ void Dense::init_layer(const vector<int>& data_shape, Regularizer *regu) {
         weights.push_back(Tensor(input_shape));
         biases.push_back(0.0);
     }
+    init_weights(weight_init);
     return; 
 }
 
