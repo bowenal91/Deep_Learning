@@ -4,7 +4,7 @@
 
 using namespace std;
 
-SimpleANN::SimpleANN(vector<int> &input_size, vector<int> &layerSize, string &loss_function) {
+SimpleANN::SimpleANN(vector<int> &input_size, vector<int> &layerSize, string loss_function) {
     numLayers = layerSize.size();
     LossFactory f;
     loss = f.create(loss_function);
@@ -59,7 +59,7 @@ void SimpleANN::train(vector<Tensor> &x, vector<Tensor> &y, int batch_size, int 
                 tensors[i+1] = layers[i]->evaluate(tensors[i]);
             }
 
-            double batch_loss = loss->calculate_loss(tensors[numLayers-1], labels);
+            double batch_loss = loss->calculate_loss(tensors[numLayers], labels);
             derivs[numLayers-1] = loss->back_propagate();
 
             for (i=numLayers-1;i>=0;i--) {
