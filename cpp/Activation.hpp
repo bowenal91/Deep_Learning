@@ -12,8 +12,8 @@ class Activation : public Layer {
     std::vector<int> input_size;
     public:
         Activation();
-        Activation(std::string& name, std::vector<int>& shape, int axis=0);
-        Activation(std::string& name, Layer *prev, int axis=0);
+        Activation(std::string name, std::vector<int>& shape, int axis=0);
+        Activation(std::string name, Layer *prev, int axis=0);
         std::vector<int> get_output_shape() override;
         void init_layer(std::string &name, int axis, std::vector<int> shape);
         Tensor evaluate(Tensor& x) override;

@@ -45,7 +45,7 @@ vector<Tensor> ActivationFunc::evaluate(vector<Tensor> &x) {
 }
 
 Tensor ActivationFunc::back_propagate(Tensor &forward, Tensor &backward) {
-    Tensor output, forward2;
+    Tensor output(input_size), forward2;
     forward2 = forward;
     double value;
     

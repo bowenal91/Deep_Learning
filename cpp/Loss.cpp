@@ -1,13 +1,14 @@
 #include "Loss.hpp"
 #include <math.h>
 #include <assert.h>
+#include <iostream>
 
 using namespace std;
 
 double Loss::calculate_loss(Tensor &y_pred, Tensor &y_label) {
     double loss = 0.0;
     assert(y_pred.get_size() == y_label.get_size());
-    for (int i=0; i<y_pred.get_size(); i++) {
+    for (int i=0; i<y_label.get_size(); i++) {
         loss += point_wise_func(y_pred.get_value(i), y_label.get_value(i));
     }
 

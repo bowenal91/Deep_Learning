@@ -7,12 +7,12 @@ Activation::Activation() {
     return;
 }
 
-Activation::Activation(string &name, vector<int> &shape, int axis) {
+Activation::Activation(string name, vector<int> &shape, int axis) {
     init_layer(name, axis, shape);
     return;
 }
 
-Activation::Activation(string &name, Layer *prev, int axis) {
+Activation::Activation(string name, Layer *prev, int axis) {
     init_layer(name,axis, prev->get_output_shape());
 }
 

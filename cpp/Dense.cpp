@@ -6,7 +6,6 @@ Dense::Dense(int num_neurons) {
 }
 
 Dense::Dense(int num_neurons, const vector<int> &data_shape) {
-    Glorot_Uniform *initial = new Glorot_Uniform();
     init_layer(num_neurons,data_shape, NULL, NULL);
 }
 

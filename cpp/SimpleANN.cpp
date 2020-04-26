@@ -60,10 +60,10 @@ void SimpleANN::train(vector<Tensor> &x, vector<Tensor> &y, int batch_size, int 
             }
 
             double batch_loss = loss->calculate_loss(tensors[numLayers], labels);
-            derivs[numLayers-1] = loss->back_propagate();
+            derivs[numLayers] = loss->back_propagate();
 
             for (i=numLayers-1;i>=0;i--) {
-                derivs[i] = layers[i]->update_propagate(tensors[i], derivs[i], rate); 
+                derivs[i] = layers[i]->update_propagate(tensors[i], derivs[i+1], rate);
             }
             
             cout << "Epoch: " << epoch << ", Batch: " << batch << ", Loss: " << batch_loss << endl;
