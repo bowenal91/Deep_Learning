@@ -3,6 +3,7 @@
 
 #include "Tensor.hpp"
 #include <vector>
+#include <string>
 
 class Loss {
     std::vector<Tensor> error_out;
@@ -45,6 +46,24 @@ class Categorical_Cross_Entropy : public Loss {
         double point_wise_func(double x_pred, double x_label) override;
         double deriv(double x_pred, double x_label) override;
    
+};
+
+class LossFactory {
+    public:
+        Loss *create(std::string &name) {
+            if (name == "MSE") {
+                return new MSE();
+            }   
+            if (name == "MAE") {
+                return new MAE();
+            }
+            if (name == "Binary Cross Entropy") {
+                return new Binary_Cross_Entropy();
+            }
+            if (name == "Categorical Cross Entropy") {
+                return new Categorical_Cross_Entropy();
+            }
+        }
 };
 
 #endif
