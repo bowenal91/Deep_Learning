@@ -6,32 +6,33 @@ Dense::Dense(int num_neurons) {
 }
 
 Dense::Dense(int num_neurons, const vector<int> &data_shape) {
-    init_layer(num_neurons,data_shape, "glorot uniform", NULL);
+    Glorot_Uniform *initial = new Glorot_Uniform();
+    init_layer(num_neurons,data_shape, NULL, NULL);
 }
 
 
-Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init) {
-    init_layer(num_neurons,data_shape, weight_init, NULL);
+Dense::Dense(int num_neurons, const vector<int> &data_shape, Initializer *initial) {
+    init_layer(num_neurons,data_shape, initial, NULL);
 }
 
-Dense::Dense(int num_neurons, Layer *prev, string weight_init) {
-    init_layer(num_neurons, prev->get_output_shape(), weight_init, NULL);
+Dense::Dense(int num_neurons, Layer *prev, Initializer *initial) {
+    init_layer(num_neurons, prev->get_output_shape(), initial, NULL);
 }
 
 
-Dense::Dense(int num_neurons, const vector<int> &data_shape, string weight_init, Regularizer *regu) {
-    init_layer(num_neurons, data_shape, weight_init, regu);
+Dense::Dense(int num_neurons, const vector<int> &data_shape, Initializer *initial, Regularizer *regu) {
+    init_layer(num_neurons, data_shape, initial, regu);
 }
 
-Dense::Dense(int num_neurons, Layer *prev, string weight_init, Regularizer *regu) {
-    init_layer(num_neurons,prev->get_output_shape(), weight_init, regu);
+Dense::Dense(int num_neurons, Layer *prev, Initializer *initial, Regularizer *regu) {
+    init_layer(num_neurons,prev->get_output_shape(), initial, regu);
 }
 
 Dense::Dense(int num_neurons, Layer *prev) {
-    init_layer(num_neurons, prev->get_output_shape(), "glorot uniform", NULL);
+    init_layer(num_neurons, prev->get_output_shape(), NULL, NULL);
 }
 
-void Dense::init_layer(int num_neurons, const vector<int>& data_shape, string weight_init, Regularizer *regu) {
+void Dense::init_layer(int num_neurons, const vector<int>& data_shape, Initializer *initial, Regularizer *regu) {
     numNeurons = num_neurons;
     input_shape.clear();
     output_shape.clear();
@@ -39,6 +40,10 @@ void Dense::init_layer(int num_neurons, const vector<int>& data_shape, string we
     biases.clear();
     output_shape.push_back(numNeurons);
     reg = regu;
+    init = initial;
+    if (!init) {
+        init = new Glorot_Uniform();
+    }
     for (int i=0;i<data_shape.size();i++) {
         input_shape.push_back(data_shape[i]);
     }
@@ -46,13 +51,11 @@ void Dense::init_layer(int num_neurons, const vector<int>& data_shape, string we
         weights.push_back(Tensor(input_shape));
         biases.push_back(0.0);
     }
-    init_weights(weight_init);
+    init_weights();
     return; 
 }
 
-void Dense::init_weights(string &init_name) {
-    InitializerFactory f;
-    init = f.create(init_name);
+void Dense::init_weights() {
     for (int i = 0;i<numNeurons;i++) {
         weights[i] = init->init_weights(input_shape, weights[i].get_size(), numNeurons);
     }

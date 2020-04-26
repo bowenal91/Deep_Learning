@@ -19,14 +19,14 @@ class Dense : public Layer {
     public:
         Dense(int num_neurons);
         Dense(int num_neurons, const std::vector<int> &data_shape);
-        Dense(int num_neurons, const std::vector<int> &data_shape, std::string weight_init);
-        Dense(int num_neurons, const std::vector<int> &data_shape, std::string weight_init, Regularizer *regu);
-        Dense(int num_neurons, Layer *prev, std::string weight_init, Regularizer *regu);
-        Dense(int num_neurons, Layer *prev, std::string weight_init);
+        Dense(int num_neurons, const std::vector<int> &data_shape, Initializer *initial);
+        Dense(int num_neurons, const std::vector<int> &data_shape, Initializer *initial, Regularizer *regu);
+        Dense(int num_neurons, Layer *prev, Initializer *initial, Regularizer *regu);
+        Dense(int num_neurons, Layer *prev, Initializer *initial);
         Dense(int num_neurons, Layer *prev);
         std::vector<int> get_output_shape() override;
-        void init_layer(int num_neurons, const std::vector<int>& data_shape, std::string weight_init, Regularizer *regu);
-        void init_weights(std::string& init_name);
+        void init_layer(int num_neurons, const std::vector<int>& data_shape, Initializer *initial, Regularizer *regu);
+        void init_weights();
         Tensor evaluate(Tensor& input) override;
         std::vector<Tensor> evaluate(std::vector<Tensor>& input) override;
         Tensor back_propagate(Tensor &forward, Tensor &backward) override;
