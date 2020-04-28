@@ -1,4 +1,5 @@
 #include "Conv.hpp"
+#include <assert.h>
 
 using namespace std;
 Conv::Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size, bool pad) {
@@ -33,22 +34,44 @@ Conv::Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> strid
 
 void Conv::init_layer(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
         bool pad, const vector<int>& data_shape, Initializer *initial, Regularizer *regu) {
-    numFilters = num_filters;
     input_shape.clear();
     output_shape.clear();
     weights.clear();
     biases.clear();
-    output_shape.push_back(numNeurons);
+    filter_size.clear();
+    strides.clear();
+    
+    numFilters = num_filters;
+    input_shape = data_shape;
     reg = regu;
     init = initial;
+    strides = stride_size;
     if (!init) {
         init = new Glorot_Uniform();
     }
-    for (int i=0;i<data_shape.size();i++) {
-        input_shape.push_back(data_shape[i]);
+   
+    filter_size.push_back(input_shape[0]);
+    for (int i=0;i<kernel_size.size();i++) {
+        filter_size.push_back(kernel_size[i]);
     }
-    for (int i=0;i<numNeurons;i++) {
-        weights.push_back(Tensor(input_shape));
+
+    output_shape.push_back(numFilters);
+    for (int i=1;i<input_size.size();i++) {
+        int W = input_size[i];
+        int K = filter_size[i];
+        int S = strides[i-1];
+        int P = 0;
+        if (padding) {
+            P = K-S;
+        }
+        assert((W-K+2*P)%S == 0);
+
+        int O = (W-K+2*P)/S;
+        output_shape.push_back(O);
+    }
+    
+    for (int i=0;i<numFilters;i++) {
+        weights.push_back(Tensor(filter_size));
         biases.push_back(0.0);
     }
     init_weights();
@@ -57,7 +80,7 @@ void Conv::init_layer(int num_filters, std::vector<int> kernel_size, std::vector
 
 void Conv::init_weights() {
     for (int i = 0;i<numNeurons;i++) {
-        weights[i] = init->init_weights(input_shape, weights[i].get_size(), numNeurons);
+        weights[i] = init->init_weights(filter_size, weights[i].get_size(), numFilters);
     }
 }
 
