@@ -72,23 +72,23 @@ double MAE::deriv(double x_pred, double x_label) {
 
 double Binary_Cross_Entropy::point_wise_func(double x_pred, double x_label) {
     if (x_label > 0.5) {
-        return log(x_pred);
+        return -log(x_pred);
     } else {
-        return log(1.0-x_pred);
+        return -log(1.0-x_pred);
     }
 }
 
 double Binary_Cross_Entropy::deriv(double x_pred, double x_label) {
     if (x_label > 0.5) {
-        return 1.0/x_pred;
+        return -1.0/x_pred;
     } else {
-        return -1.0/(1.0-x_pred);
+        return 1.0/(1.0-x_pred);
     }
 }
 
 double Categorical_Cross_Entropy::point_wise_func(double x_pred, double x_label) {
     if (x_label > 0.5) {
-        return log(x_pred);
+        return -log(x_pred);
     } else {
         return 0.0;
     }
@@ -96,7 +96,7 @@ double Categorical_Cross_Entropy::point_wise_func(double x_pred, double x_label)
 
 double Categorical_Cross_Entropy::deriv(double x_pred, double x_label) {
     if (x_label > 0.5) {
-        return 1.0/x_pred;
+        return -1.0/x_pred;
     } else {
         return 0.0;
     }
