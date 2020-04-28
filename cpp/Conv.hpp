@@ -4,23 +4,39 @@
 #include <vector>
 #include "Tensor.hpp"
 #include "Layer.hpp"
+#include "Initializer.hpp"
+#include "Regularizer.hpp"
 #include <string>
 
 class Conv : public Layer {
     std::vector<int> input_shape;
     std::vector<int> output_shape;
-    std::vector<int> weight_shape;
     std::vector<Tensor> weights;
     std::vector<double> biases;
-    int numNeurons;
-    int batch_size;
+    Initializer *init;
+    Regularizer *reg;
+    int numFilters;
+    std::vector<int> filter_size;
+    std::vector<int> strides;
+    bool padding;
     public:
-        Conv(int num_neurons);
-        Conv(int num_neurons, const std::vector<int> &data_shape);
-        Conv(int num_neurons, Layer *prev);
+        Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
+                bool pad);
+        Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
+                bool pad, const std::vector<int> &data_shape);
+        Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
+                bool pad, const std::vector<int> &data_shape, Initializer *initial);
+        Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
+                bool pad, const std::vector<int> &data_shape, Initializer *initial, Regularizer *regu);
+        Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
+                bool pad, Layer *prev, Initializer *initial, Regularizer *regu);
+        Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
+                bool pad, Layer *prev, Initializer *initial);
+        Conv(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size,
+                bool pad, Layer *prev);
         std::vector<int> get_output_shape() override;
-        void init_layer(const std::vector<int>& data_shape) override;
-        void randomize_weights(double max);
+        void init_layer(int num_filters, std::vector<int> kernel_size, std::vector<int> stride_size, bool pad, const std::vector<int>& data_shape, Initializer *initial, Regularizer *regu);
+        void init_weights();
         Tensor evaluate(Tensor& input) override;
         std::vector<Tensor> evaluate(std::vector<Tensor>& input) override;
         Tensor back_propagate(Tensor &forward, Tensor &backward) override;
