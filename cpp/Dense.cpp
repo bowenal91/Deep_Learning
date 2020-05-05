@@ -43,9 +43,7 @@ void Dense::init_layer(int num_neurons, const vector<int>& data_shape, Initializ
     if (!init) {
         init = new Glorot_Uniform();
     }
-    for (int i=0;i<data_shape.size();i++) {
-        input_shape.push_back(data_shape[i]);
-    }
+    input_shape = data_shape;
     for (int i=0;i<numNeurons;i++) {
         weights.push_back(Tensor(input_shape));
         biases.push_back(0.0);
